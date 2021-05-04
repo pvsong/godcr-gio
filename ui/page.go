@@ -248,6 +248,12 @@ func (win *Window) addPages(decredIcons map[string]image.Image) {
 			imageInactive: ic.moreIconInactive,
 			page:          PageMore,
 		},
+		{
+			clickable:     new(widget.Clickable),
+			image:         ic.moreIcon,
+			imageInactive: ic.moreIconInactive,
+			page:          PageDex,
+		},
 	}
 
 	common := pageCommon{
@@ -348,6 +354,7 @@ func (win *Window) addPages(decredIcons map[string]image.Image) {
 	win.pages[PagePrivacy] = win.PrivacyPage(common)
 	win.pages[PageTickets] = win.TicketPage(common)
 	win.pages[ValidateAddress] = win.ValidateAddressPage(common)
+	win.pages[PageDex] = win.DexPage(common)
 }
 
 func (page *pageCommon) fetchExchangeValue(target interface{}) error {

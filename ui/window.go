@@ -16,6 +16,7 @@ import (
 	"gioui.org/text"
 
 	"github.com/planetdecred/dcrlibwallet"
+	"github.com/planetdecred/godcr/dex"
 	"github.com/planetdecred/godcr/ui/decredmaterial"
 	"github.com/planetdecred/godcr/ui/values"
 	"github.com/planetdecred/godcr/wallet"
@@ -61,6 +62,8 @@ type Window struct {
 	walletAcctMixerStatus   chan *wallet.AccountMixer
 	internalLog             chan string
 	selectedProposal        *dcrlibwallet.Proposal
+
+	dexc *dex.Dex
 }
 
 type WriteClipboard struct {
@@ -72,7 +75,7 @@ type WriteClipboard struct {
 // Should never be called more than once as it calls
 // app.NewWindow() which does not support being called more
 // than once.
-func CreateWindow(wal *wallet.Wallet, decredIcons map[string]image.Image, collection []text.FontFace, internalLog chan string) (*Window, error) {
+func CreateWindow(wal *wallet.Wallet, decredIcons map[string]image.Image, collection []text.FontFace, dex *dex.Dex, internalLog chan string) (*Window, error) {
 	win := new(Window)
 	var netType string
 	if strings.Contains(wal.Net, "testnet") {
@@ -95,6 +98,8 @@ func CreateWindow(wal *wallet.Wallet, decredIcons map[string]image.Image, collec
 	win.walletAcctMixerStatus = make(chan *wallet.AccountMixer)
 
 	win.wallet = wal
+	win.dexc = dex
+
 	win.states.loading = true
 	win.current = PageOverview
 	win.keyEvents = make(chan *key.Event)

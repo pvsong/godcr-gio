@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"image"
 	"net/http"
@@ -18,6 +19,7 @@ import (
 	"gioui.org/app"
 
 	"github.com/planetdecred/dcrlibwallet"
+	"github.com/planetdecred/godcr/dex"
 	"github.com/planetdecred/godcr/ui"
 	"github.com/planetdecred/godcr/wallet"
 )
@@ -118,7 +120,18 @@ func main() {
 		collection = append(collection, text.FontFace{Font: text.Font{}, Face: fnt})
 	}
 
-	win, err := ui.CreateWindow(wal, decredIcons, collection, internalLog)
+	dbPath := filepath.Join(cfg.HomeDir, cfg.Network, "dexc.db")
+	dexc, err := dex.NewDex(cfg.DebugLevel, dbPath, cfg.Network, logWriter{})
+	if err != nil {
+		fmt.Printf("error creating Dex: %s", err)
+		return
+	}
+
+	appCtx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	dexc.Run(appCtx, cancel)
+
+	win, err := ui.CreateWindow(wal, decredIcons, collection, dexc, internalLog)
 	if err != nil {
 		fmt.Printf("Could not initialize window: %s\ns", err)
 		return
