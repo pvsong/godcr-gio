@@ -19,6 +19,8 @@ type Dex struct {
 	core *core.Core
 }
 
+const DefaultAssert = 42
+
 func NewDex(debugLevel string, dbPath, net string, w io.Writer) (*Dex, error) {
 	logMaker := initLogging(debugLevel, true, w)
 	log = logMaker.Logger("DEXC")
