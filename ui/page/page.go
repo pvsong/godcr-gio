@@ -14,10 +14,6 @@ import (
 	"github.com/planetdecred/godcr/ui/values"
 )
 
-// pages that haven't been migrated
-// todo: to be removed when the page is migrated but their IDs are need for page navigation
-const PagePrivacy = "Privacy"
-
 type (
 	C = layout.Context
 	D = layout.Dimensions
